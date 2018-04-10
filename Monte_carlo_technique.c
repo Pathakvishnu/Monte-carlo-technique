@@ -5,28 +5,56 @@
 #include<time.h>
 #define seed 35791246
  
- //radius is fixed i.e 1
 long int i= 0;
 long int thread_wanted = 0;
-long int counts  = 0;//count is counting the number of points generating within the circle
+long int counts  = 0;
+//int R;
+pthread_mutex_t lock;
  
-int main(int argc,char* argv)
+void * total_points(void * arg);
+void * total_points(void * arg)
 {
-  printf("Enter the number of thread wanted to generate coordinates: \n");
-  scanf("%ld",&thread_wanted);
-  srand(SEED);
-   count=0;
-   for ( i=0; i<thread_wanted; i++) { 
-      X = (double)rand()/RAND_MAX;
-      Y = (double)rand()/RAND_MAX;
-      Z = X*X+Y*Y;
-      if (Z<=1) {
-    	//printf("Coordinates is (%d,%d)\n",X,Y);
-	  count++;}
-      }
-   pi=(double)count/thread_wanted*4;//thread_wanted == total number of points
-   printf("# of thread generated= %d , estimate value of pi is %g \n",thread_wanted,pi);
+ pthread_mutex_lock(&lock);
+ for(i=0;i<thread_wanted;i++)
+ {
+ //printf("Ranom _max %d ", RAND_MAX);
+  double x= (double)rand()/RAND_MAX;
+  double y = (double)rand()/RAND_MAX;
+//  printf("Cordinate x : %f Cordinate y : %f\n",x,y);
+  double z = x*x + y*y;
+//pthread_mutex_lock(&lock);
+  if(z<=.3 && counts<thread_wanted)
+  {
+        //printf("Cordinate x : %f Cordinate y : %f\n",x,y);
+        counts++;
+  }
+ }
+pthread_mutex_unlock(&lock);
+pthread_exit(NULL);
 }
+ 
+int main()
+{
+ printf("enter the number of points u want to generate");
+ scanf("%ld",&thread_wanted);
+ pthread_t thread[thread_wanted];
+//printf("Enter the value of radius");
+//scanf("%d",&R);
+srand(seed);
+ for(i=0;i<thread_wanted;i++)
+ {
+  pthread_create(&thread[i],NULL,total_points,NULL);
+ }
+for(i=0;i<thread_wanted;i++)
+ {
+  pthread_join(thread[i],NULL);
+ }
+ double points = 4.0 * counts;
+ double pi = points / thread_wanted;  //thread_wanted == total_number_of_points
+ printf("value pf pi is %.2f ",pi);
+}
+ 
+
  
 //function for calculating total numbers of points being generated within circle
  
