@@ -1,53 +1,31 @@
+//estimating pi with the use of monte caro technique
 #include <stdio.h>
-#include <semaphore.h>
-#include <pthread.h>
 #include <math.h>
 #include <stdlib.h>
+#include<time.h>
+#define seed 35791246
  
- 
+ //radius is fixed i.e 1
 long int i= 0;
 long int thread_wanted = 0;
-long int counts  = 0;
-pthread_mutex_t lock;
+long int counts  = 0;//count is counting the number of points generating within the circle
  
-void * total_points(void * arg);
-void * total_points(void * arg)
+int main(int argc,char* argv)
 {
- pthread_mutex_lock(&lock);
- for(i=0;i<thread_wanted;i++)
- {
-  int x=(int)rand()%10;
-  int y=(int)rand()%10;
-  double X = (double)x/10;
-  double Y = (double)y/10;
-   printf("%f  %f\n",X,Y);
-  if(((X*X)+(Y*Y))<=1)
-  {
-   counts++;
- 
-  }
- }
- pthread_mutex_unlock(&lock);
-}
- 
-int main()
-{
- printf("enter the number of points u want to generate");
- scanf("%ld",&thread_wanted);
- pthread_t thread[thread_wanted];
-  
- for(i=0;i<thread_wanted;i++)
- {
-  pthread_create(&thread[i],NULL,&total_points,NULL);
- }
-  
- for(i=0;i<thread_wanted;i++)
- {
-  pthread_join(thread[i],NULL);
- }
- double points = 4.0 * counts;
- double pi = points / thread_wanted;  //thread_wanted == total_number_of_points
- printf("value pf pi is %f",pi);
+  printf("Enter the number of thread wanted to generate coordinates: \n");
+  scanf("%ld",&thread_wanted);
+  srand(SEED);
+   count=0;
+   for ( i=0; i<thread_wanted; i++) { 
+      X = (double)rand()/RAND_MAX;
+      Y = (double)rand()/RAND_MAX;
+      Z = X*X+Y*Y;
+      if (Z<=1) {
+    	//printf("Coordinates is (%d,%d)\n",X,Y);
+	  count++;}
+      }
+   pi=(double)count/thread_wanted*4;//thread_wanted == total number of points
+   printf("# of thread generated= %d , estimate value of pi is %g \n",thread_wanted,pi);
 }
  
 //function for calculating total numbers of points being generated within circle
