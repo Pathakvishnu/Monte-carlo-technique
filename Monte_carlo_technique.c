@@ -3,8 +3,7 @@
 #include <math.h>
 #include <stdlib.h>
 #include<time.h>
-#define seed 35791246
- 
+
 long int i= 0;
 long int thread_wanted = 0;
 long int counts  = 0;
@@ -40,7 +39,7 @@ int main()
  pthread_t thread[thread_wanted];
 //printf("Enter the value of radius");
 //scanf("%d",&R);
-srand(seed);
+srand(time(0));
  for(i=0;i<thread_wanted;i++)
  {
   pthread_create(&thread[i],NULL,total_points,NULL);
