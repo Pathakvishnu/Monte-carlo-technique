@@ -1,4 +1,4 @@
-//estimating pi with the use of monte caro technique
+/estimating pi with the use of monte caro technique
 #include <stdio.h>
 #include<pthread.h>
 #include <math.h>
@@ -23,7 +23,7 @@ void * total_points(void * arg)
 //  printf("Cordinate x : %f Cordinate y : %f\n",x,y);
   double z = x*x + y*y;
 //pthread_mutex_lock(&lock);
-  if(z<=.3 && counts<thread_wanted)
+  if(z<=.18 && counts<thread_wanted)
   {
         //printf("Cordinate x : %f Cordinate y : %f\n",x,y);
         counts++;
